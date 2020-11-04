@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content  %}
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card" style="padding: 10px;">
+                <h1 class="text-center">{{ post.title|title }}</h1>
+                <img src="{{ post.thumbnail.url }}" class="card-img-top" alt="..." post <hr>
+                <div>
+                    <span><i class="far fa-eye ml-2"></i> {{ post.get_view_count }}</span>
+                    <span><i class="far fa-thumbs-up ml-2"></i> {{ post.get_like_count }}</span>
+                    <span><i class="far fa-comments ml-2"></i> {{ post.get_comment_count }}</span>
+                    <span class="float-right"> Posted {{ post.publish_date|timesince }} ago</span>
+                </div>
+                <hr>
+                <div>
+                    <p class="card-text">{{ post.content }}</p>
+                </div>
+                <hr>
+                <div>
+                    {% if request.user.is_authenticated %}
+                    <h4> Enjoy this post? give it a like</h4>
+                    <a class="text-muted" href="{{ post.get_like_url }}"><i class="far fa-thumbs-up fa-lg"></i>
+                        {{ post.get_like_count }}</a>
+                    <hr>
+                    <h4>Leave a comment below</h4>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-danger" type="submit">Comment</button>
+                    </form>
+                    <hr>
+                    <h5>Comments</h5>
+                    {% for comment in post.comments %}
+                    <div>
+                        <p>{{ comment.content }}
+                            <br>
+                            <small>{{ comment.timestamp|timesince }} ago</small>
+                        </p>
+                        <hr>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    {% for comment in post.comments %}
+                    <div>
+                        <p>{{ comment.content }}
+                            <br>
+                            <small>{{ comment.timestamp|timesince }} ago</small>
+                        </p>
+                        <hr>
+                    </div>
+                    {% endfor %}
+                    <a href="{% url 'account_login' %}" class="btn btn-primary btn-block">Login to comment</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content  %}
