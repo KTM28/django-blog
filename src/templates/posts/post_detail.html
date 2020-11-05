@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content  %}
 <div class="container">
@@ -27,7 +28,7 @@
                     <h4>Leave a comment below</h4>
                     <form method="POST">
                         {% csrf_token %}
-                        {{ form.as_p }}
+                        {{ form|crispy }}
                         <button class="btn btn-danger" type="submit">Comment</button>
                     </form>
                     <hr>
